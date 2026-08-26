@@ -13,9 +13,7 @@ spring:
       server:
         native:
           search-locations:
-            - classpath:/config-repo
-            - classpath:/config-repo/platform
-            - classpath:/config-repo/servers
+            - classpath:/config-repo/
 
         git:
           uri: https://github.com/Alokafernando/smathr-configurations.git
