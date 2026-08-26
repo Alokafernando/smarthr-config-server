@@ -6,7 +6,7 @@ spring:
     name: config-server
 
   profiles:
-    active: native
+    active: git
 
   cloud:
     config:
@@ -16,12 +16,15 @@ spring:
             - classpath:/config-repo/
 
         git:
-          uri: https://github.com/Alokafernando/smathr-configurations.git
+          uri: https://github.com/Alokafernando/smarthr-configurations.git
           default-label: main
           clone-on-start: true
+          force-pull: true
+          timeout: 10
           search-paths:
             - platform
             - servers
+            - '{application}'
 
 management:
   endpoints:
