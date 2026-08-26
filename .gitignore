@@ -3,3 +3,4 @@
 *.iml
 *.log
 .env
+src/main/resources/config-repo

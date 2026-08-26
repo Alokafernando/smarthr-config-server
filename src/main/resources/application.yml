@@ -4,20 +4,31 @@ server:
 spring:
   application:
     name: config-server
+
   profiles:
-    active: ${CONFIG_PROFILE:native}
+    active: native
+
   cloud:
     config:
       server:
         native:
-          search-locations: ${CONFIG_SEARCH_LOCATIONS:file:./smarthr-backend-platform/config-repo,file:../config-repo,file:/opt/smarthr/config-repo,classpath:/config-repo}
+          search-locations:
+            - classpath:/config-repo
+            - classpath:/config-repo/platform
+            - classpath:/config-repo/servers
+
         git:
-          uri: ${CONFIG_GIT_URI:https://github.com/buddhika/smarthr-config.git}
+          uri: https://github.com/Alokafernando/smathr-configurations.git
           default-label: main
-          clone-on-start: false
+          clone-on-start: true
+          search-paths:
+            - platform
+            - servers
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include:
+          - health
+          - info
