@@ -1,0 +1,88 @@
+# SmartHR - Production Configuration
+# Applied when SPRING_PROFILES_ACTIVE=prod
+# Secrets are injected via GCP Secret Manager / environment variables
+# =========================================================================
+
+spring:
+  # Cloud SQL PostgreSQL (Private IP via VPC)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:smarthr}
+    username: ${DB_USER:smarthr_app}
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  # MongoDB Atlas (Document Service only)
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/smarthr_documents}
+
+# GCP Configuration
+gcp:
+  project-id: ${GCP_PROJECT_ID:}
+  storage:
+    bucket-name: smarthr-documents-${GCP_PROJECT_ID:local}
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:SmartHR-Default-Secret-Change-In-Production-2025}
+  expiration: 86400000  # 24 hours
+
+# Eureka Client (all services register here)
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+# Actuator Health Checks (for MIG health checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    com.smarthr: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
+  file:
+    name: /var/log/smarthr/${spring.application.name:-service}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+
+# CORS (allow Cloud Run frontend URL)
+cors:
+  allowed-origins:
+    - "https://*.run.app"
+    - "http://localhost:5173"
+    - "http://localhost:3000"

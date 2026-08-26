@@ -1,0 +1,27 @@
+server:
+  port: 8083
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://buddhikaaloka2005_db_user:pEvgEDUlw0Qbrh99@hr-management.r3kcaqr.mongodb.net/smarthr_document_db?appName=hr-management
+
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 30MB
+
+gcp:
+  project-id: ${GCP_PROJECT_ID:[GCP_PROJECT_ID]}
+  storage:
+    bucket-name: ${GCS_BUCKET_NAME:smarthr-documents}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
