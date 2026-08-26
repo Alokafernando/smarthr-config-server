@@ -1,0 +1,23 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: ${CONFIG_PROFILE:native}
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: ${CONFIG_SEARCH_LOCATIONS:file:./smarthr-backend-platform/config-repo,file:../config-repo,file:/opt/smarthr/config-repo,classpath:/config-repo}
+        git:
+          uri: ${CONFIG_GIT_URI:https://github.com/buddhika/smarthr-config.git}
+          default-label: main
+          clone-on-start: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
