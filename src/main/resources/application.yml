@@ -6,7 +6,7 @@ spring:
     name: config-server
 
   profiles:
-    active: git
+    active: native
 
   cloud:
     config:
@@ -15,17 +15,6 @@ spring:
           search-locations:
             - classpath:/config-repo/
 
-        git:
-          uri: https://github.com/Alokafernando/smarthr-configurations.git
-          default-label: main
-          clone-on-start: true
-          force-pull: true
-          timeout: 10
-          search-paths:
-            - platform
-            - servers
-            - '{application}'
-
 management:
   endpoints:
     web:
@@ -33,3 +22,4 @@ management:
         include:
           - health
           - info
+          - env
